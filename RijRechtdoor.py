@@ -257,11 +257,9 @@ y = width*0.5
 robot = Robot(x, y)
 
 #Bepaald hoe snel de simulatie verloopt
-snelheid = 10
+snelheid = 5
 
-ignorePlant = None
 start = False
-
 while not start:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -275,21 +273,17 @@ while not done:
             done = True
 
     #TODO: In te vullen door de leerlingen
-    if robot.plant is None:
-        rijCirkelEnMap(robot, 100)
-        if len(robot.gevondenPlanten) is not 0:
-            gevondenPlant = robot.gevondenPlanten.pop()
-            robot.ignorePlant = gevondenPlant.nr
+    rijRechtdoor(robot,700)
+
+    gevondenPlant = checkVoorPlanten(robot.x,robot.y,robot.plant)
+    if gevondenPlant is not None:
+        if robot.plant is None:
             rijdRobotNaarPlant(robot.x,robot.y,gevondenPlant)
             pickUpPlant(robot,gevondenPlant)
-        else:
-            loopRandomRond(robot)
     else:
-        loopRandomRond(robot)
-        if checkVoorPlanten(robot.x, robot.y,robot.plant) is None:
+        if robot.plant is not None:
             placePlant(robot,robot.plant)
-
-
+    draai90Graden(robot)
 
     pygame.time.delay(snelheid)
     if checkPlantenOpstelling():
